@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.fragments.MainFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".presentation.fragments.MainFragment"
+        android:padding="5dp">
+
+        <RadioGroup
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:id="@+id/rdo_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rdo_client"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/role_client"/>
+
+            <RadioButton
+                android:id="@+id/rdo_server"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/role_server"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/label_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rdo_group"
+            app:layout_constraintBottom_toBottomOf="@id/edit_name"
+            android:layout_marginStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:visibility="visible"
+            android:text="Name* : "
+            android:textSize="16sp"/>
+
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:maxLength="25"
+            android:ems="20"
+            android:gravity="center"
+            android:hint="@string/hint_name"
+            android:visibility="visible"
+            app:layout_constraintStart_toEndOf="@id/label_phone"
+            app:layout_constraintTop_toBottomOf="@id/rdo_group"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/label_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_name"
+            app:layout_constraintBottom_toBottomOf="@id/edit_phone"
+            android:layout_marginStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:visibility="visible"
+            android:text="Phone Number* : "
+            android:textSize="16sp"/>
+
+        <EditText
+            android:id="@+id/edit_phone"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:maxLength="10"
+            android:ems="11"
+            android:gravity="center"
+            android:visibility="visible"
+            android:hint="@string/hint_phone"
+            app:layout_constraintStart_toEndOf="@id/label_phone"
+            app:layout_constraintTop_toBottomOf="@id/label_name"
+            android:inputType="phone"/>
+
+        <TextView
+            android:id="@+id/label_price_ticket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:visibility="gone"
+            android:text="Price per Ticket* : "
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/edit_price_ticket"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_phone" />
+
+        <EditText
+            android:id="@+id/edit_price_ticket"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ems="7"
+            android:gravity="center"
+            android:maxLength="7"
+            android:hint="@string/hint_price"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/label_price_ticket"
+            app:layout_constraintTop_toBottomOf="@id/label_phone"
+            android:inputType="number"/>
+
+        <TextView
+            android:id="@+id/label_ticket_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:visibility="gone"
+            android:text="Ticket Size* : "
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/edit_ticket_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_price_ticket" />
+
+        <EditText
+            android:id="@+id/edit_ticket_size"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:gravity="center"
+            android:hint="@string/hint_size"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/label_price_ticket"
+            app:layout_constraintTop_toBottomOf="@id/label_price_ticket"
+            android:inputType="number"/>
+
+        <TextView
+            android:id="@+id/label_members"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:visibility="gone"
+            android:text="Total Members* : "
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/edit_members"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_ticket_size" />
+
+        <EditText
+            android:id="@+id/edit_members"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ems="7"
+            android:maxLength="7"
+            android:gravity="center"
+            android:hint="@string/hint_member"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/label_price_ticket"
+            app:layout_constraintTop_toBottomOf="@id/label_ticket_size"
+            android:inputType="number"/>
+
+        <TextView
+            android:id="@+id/label_size_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/edit_ticket_size"
+            app:layout_constraintTop_toBottomOf="@id/label_price_ticket"
+            app:layout_constraintBottom_toBottomOf="@id/edit_ticket_size"
+            android:layout_marginStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:visibility="gone"
+            android:text="(1 to 3)"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/label_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_members"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:textColor="@android:color/holo_red_dark"
+            android:text="@string/amount_label"/>
+
+        <Button
+            style="@style/button_style"
+            android:id="@+id/button"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:textSize="20sp"
+            android:text="@string/ok"
+            android:enabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Tambola</string>
+    <string name="game_exit">Do you want to exit this game? (All the changes will be lost)</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="ok">OK</string>
+    <string name="action_exit">Press BACK again to exit</string>
+    <string name="welcome_guest">Welcome</string>
+    <string name="hint_name"><font size= "16">Name</font></string>
+    <string name="hint_phone"><font size= "16">Phone No.</font></string>
+    <string name="hint_price"><font size= "16">Price per Member</font></string>
+    <string name="hint_size"><font size= "16">Tickets per Member</font></string>
+    <string name="hint_member"><font size= "16">Total Members</font></string>
+    <string name="hint_game_name"><font size= "16">Game Name</font></string>
+    <string name="hint_game_price"><font size= "16">Game Price</font></string>
+    <string name="hint_game_winner"><font size= "16">Game Winner</font></string>
+    <string name="label_no_games">No Games Added</string>
+    <string name="btn_text_add_new">Add New</string>
+    <string name="btn_text_build_server">Build Server</string>
+    <string name="find_servers">Finding local Servers</string>
+    <string name="role_client">Client</string>
+    <string name="role_server">Server</string>
+    <string name="amount_label">Amount to be collected : 0</string>
+    <string name="menu_wallet">Money Holder</string>
+    <string name="menu_participants">Joined Members</string>
+    <string name="menu_winner">Winners</string>
+    <string name="game_end">END</string>
+</resources>

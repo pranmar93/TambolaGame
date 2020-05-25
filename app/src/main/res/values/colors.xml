@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#E4E4E4</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#F0F0F0</color>
+
+    <color name="background_color">#FFFFFF</color>
+    <color name="delta_drive_blue_color">#0087DC</color>
+    <color name="delta_drive_stroke_color">#AFB1B2</color>
+    <color name="delta_drive_text_header_color">#5A5A5A</color>
+    <color name="text_input_color">#008577</color>
+    <color name="popup_menu_item_text_color">#3949AB</color>
+    <color name="transparent">#00FFFFFF</color>
+</resources>

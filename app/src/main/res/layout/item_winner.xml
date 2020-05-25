@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:background="@drawable/border"
+    android:layout_margin="4dp"
+    android:padding="10dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="6"
+        android:id="@+id/gameName"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:id="@+id/gamePrice"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:id="@+id/gameWinner"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+</LinearLayout>

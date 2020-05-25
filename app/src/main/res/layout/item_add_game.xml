@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_weight="8"
+        android:ellipsize="end"
+        android:clickable="false"
+        android:focusable="false"
+        android:gravity="center_vertical"
+        android:id="@+id/add_game"/>
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:gravity="center"
+        android:layout_weight="3"
+        android:ellipsize="end"
+        android:clickable="false"
+        android:focusable="false"
+        android:id="@+id/add_price"/>
+
+    <ImageButton
+        android:id="@+id/edit_game"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="#00FFFFFF"
+        android:layout_weight="2"
+        android:src="@drawable/ic_edit_game"/>
+
+    <ImageButton
+        android:id="@+id/delete_game"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:background="#00FFFFFF"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_delete_game" />
+
+</LinearLayout>

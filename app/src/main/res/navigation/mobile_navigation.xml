@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_main">
+
+    <fragment
+            android:id="@+id/nav_main"
+            android:name="com.example.tambolaGame.presentation.fragments.MainFragment"
+            android:label="Game Settings"
+        tools:layout="@layout/fragment_main" >
+
+        <action android:id="@+id/action_nav_main_to_nav_add_games"
+            app:destination="@id/nav_add_games"/>
+
+        <action android:id="@+id/action_nav_main_to_nav_device_list"
+            app:destination="@id/nav_device_list"/>
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/nav_add_games"
+            android:name="com.example.tambolaGame.presentation.fragments.AddGamesFragment"
+            android:label="Add Games"
+            tools:layout="@layout/fragment_add_games">
+
+        <action android:id="@+id/action_nav_add_games_to_nav_games"
+            app:destination="@id/nav_games"
+            app:popUpTo="@id/nav_main"
+            app:popUpToInclusive="false"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_device_list"
+        android:name="com.example.tambolaGame.presentation.fragments.DeviceListFragment"
+        android:label="Nearby Server"
+        tools:layout="@layout/fragment_device_list" >
+
+        <action android:id="@+id/action_nav_device_list_to_nav_games"
+            app:destination="@id/nav_games"
+            app:popUpTo="@id/nav_main"
+            app:popUpToInclusive="false"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_games"
+        android:name="com.example.tambolaGame.presentation.fragments.GameFragment"
+        android:label="Tambola"
+        tools:layout="@layout/fragment_game_ticket" >
+
+        <action android:id="@+id/action_nav_games_to_nav_participants_wallet"
+            app:destination="@id/nav_participants_wallet"/>
+
+        <action android:id="@+id/action_nav_games_to_nav_winner"
+            app:destination="@id/nav_winner"/>
+
+        <action android:id="@+id/action_nav_games_to_nav_main"
+            app:destination="@id/nav_main"
+            app:popUpTo="@id/nav_main"
+            app:popUpToInclusive="false"/>
+
+        <action android:id="@+id/action_nav_games_to_nav_number_board"
+            app:destination="@id/nav_number_board"/>
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/nav_number_board"
+            android:name="com.example.tambolaGame.presentation.fragments.NumberBoardFragment"
+            android:label="Number Chart"
+            tools:layout="@layout/fragment_number_board">
+
+        <action android:id="@+id/action_nav_number_board_to_nav_participants_wallet"
+            app:destination="@id/nav_participants_wallet"
+            app:popUpTo="@id/nav_games"
+            app:popUpToInclusive="false"/>
+
+        <action android:id="@+id/action_nav_number_board_to_nav_winner"
+            app:destination="@id/nav_winner"
+            app:popUpTo="@id/nav_games"
+            app:popUpToInclusive="false"/>
+
+        <action android:id="@+id/action_nav_number_board_to_nav_main"
+            app:destination="@id/nav_main"
+            app:popUpTo="@id/nav_main"
+            app:popUpToInclusive="false"/>
+
+    </fragment>
+
+    <fragment
+            android:id="@+id/nav_participants_wallet"
+            android:name="com.example.tambolaGame.presentation.fragments.ParticipantsWalletFragment"
+            tools:layout="@layout/fragment_participants_wallet">
+
+        <action android:id="@+id/action_nav_participants_wallet_to_nav_winner"
+            app:destination="@id/nav_winner"
+            app:popUpTo="@id/nav_games"
+            app:popUpToInclusive="false"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_winner"
+        android:name="com.example.tambolaGame.presentation.fragments.WinnerFragment"
+        android:label="Winner"
+        tools:layout="@layout/fragment_winner">
+
+        <action android:id="@+id/action_nav_winner_to_nav_participants_wallet"
+            app:destination="@id/nav_participants_wallet"
+            app:popUpTo="@id/nav_games"
+            app:popUpToInclusive="false"/>
+
+    </fragment>
+
+</navigation>

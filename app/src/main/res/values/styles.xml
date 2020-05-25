@@ -1,0 +1,95 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:itemTextAppearance">@style/itemTextStyle.AppTheme</item>
+        <item name="colorControlActivated">#008577</item>
+    </style>
+
+    <style name="button_style" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="cornerRadius">18dp</item>
+        <item name="rippleColor">#0087DC</item>
+        <item name="strokeColor">@color/delta_drive_stroke_color</item>
+<!--        <item name="backgroundTint">#ffffff</item>-->
+        <item name="strokeWidth">1dp</item>
+        <item name="android:textColor">@color/delta_drive_blue_color</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/arial_regular</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar"> false </item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="ToolbarSubtitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">18dp</item>
+    </style>
+
+    <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="overlapAnchor">true</item>
+    </style>
+
+    <style name="itemTextStyle.AppTheme" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/arial_regular</item>
+        <item name="android:textColor">@color/popup_menu_item_text_color</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="TextAppearence.App.TextInputLayout"  parent="@android:style/TextAppearance">
+        <item name="backgroundTint">@color/text_input_color</item>
+    </style>
+
+
+    <style name="CustomDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/Alert.Button.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Alert.Button.Negative</item>
+        <!--title and message color-->
+        <item name="android:textColorPrimary">@color/delta_drive_text_header_color</item>
+        <!--dialog background-->
+        <item name="android:windowBackground">@drawable/background_dialog</item>
+    </style>
+
+    <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="backgroundTint">#FFFFFF</item>
+        <item name="android:width">120dp</item>
+        <item name="cornerRadius">18dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="strokeWidth">0.5dp</item>
+        <item name="strokeColor">@color/delta_drive_stroke_color</item>
+        <item name="android:textColor">@color/delta_drive_blue_color</item>
+        <item name="android:textStyle">bold</item>
+
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="Alert.Button.Negative" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="backgroundTint">#FFFFFF</item>
+        <item name="android:width">120dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+         <item name="cornerRadius">18dp</item>
+        <item name="strokeWidth">0.5dp</item>
+        <item name="strokeColor">@color/delta_drive_stroke_color</item>
+        <item name="android:textColor">@color/delta_drive_text_header_color</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+
+</resources>
