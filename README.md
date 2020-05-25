@@ -18,6 +18,11 @@ The clients can join to the SERVER which initiates the process of generating tic
 8. SERVER can generate random numbers with every one in complete sync.
 
 ![Images](/screenshots/Screenshot_20200525-165516_Tambola.jpg)
+![Images](/screenshots/Screenshot_20200525-170324_Tambola.jpg)
+![Images](/screenshots/Screenshot_20200525-170445_Tambola.jpg)
+![Images](/screenshots/Screenshot_20200525-170626_Tambola.jpg)
+![Images](/screenshots/Screenshot_20200525-170650_Tambola.jpg)
+![Images](/screenshots/Screenshot_20200525-170614_Tambola.jpg)
 
 ## About Tambola Game
 Each player must buy at least one ticket to enter a game. Tambola is played with Numbers (1-90) being called out one at a time and players striking out those Numbers on their Tickets. It contains 27 spaces, arranged in nine columns by three rows. Each row contains five numbers and four blank spaces. Each column contains up to three numbers.The first column contains numbers from 1 to 9, the second column numbers from 10 to 20, the third, 20 to 30 and so on up until the last column, which contains numbers from 80 to 90.
