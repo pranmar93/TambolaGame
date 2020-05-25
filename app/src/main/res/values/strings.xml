@@ -11,9 +11,6 @@
     <string name="hint_price"><font size= "16">Price per Member</font></string>
     <string name="hint_size"><font size= "16">Tickets per Member</font></string>
     <string name="hint_member"><font size= "16">Total Members</font></string>
-    <string name="hint_game_name"><font size= "16">Game Name</font></string>
-    <string name="hint_game_price"><font size= "16">Game Price</font></string>
-    <string name="hint_game_winner"><font size= "16">Game Winner</font></string>
     <string name="label_no_games">No Games Added</string>
     <string name="btn_text_add_new">Add New</string>
     <string name="btn_text_build_server">Build Server</string>
