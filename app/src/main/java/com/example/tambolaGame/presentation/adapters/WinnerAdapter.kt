@@ -3,6 +3,7 @@ package com.example.tambolaGame.presentation.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,8 +36,15 @@ class WinnerAdapter(private val context: Context): RecyclerView.Adapter<WinnerAd
             itemView.gameName.text = item.gameName
             itemView.gamePrice.text = "Rs. ${item.gamePrice}"
 
+            itemView.gameWinner.movementMethod = ScrollingMovementMethod()
+
             if (item.gameWinner != null) {
-                itemView.gameWinner.text = item.gameWinner!!.userName
+                var winners = ""
+                for (device in item.gameWinner!!) {
+                    winners += "${device.userName}, "
+                }
+                winners = winners.dropLast(2)
+                itemView.gameWinner.text = winners
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     val drawable = ContextCompat.getDrawable(context, R.drawable.border)!!.mutate()
                     drawable.setTint(ContextCompat.getColor(context, R.color.colorPrimary))

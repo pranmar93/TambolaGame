@@ -4,5 +4,5 @@ data class Game (
     var gameId: Int,
     var gameName: String,
     var gamePrice: Int,
-    var gameWinner: UserDevice?
+    var gameWinner: ArrayList<UserDevice>?
 )

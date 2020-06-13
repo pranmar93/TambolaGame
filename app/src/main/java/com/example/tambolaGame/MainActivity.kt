@@ -27,6 +27,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.GravityCompat
 import androidx.core.view.forEach
 import androidx.drawerlayout.widget.DrawerLayout
@@ -45,13 +46,18 @@ import com.example.tambolaGame.presentation.fragments.ParticipantsWalletFragment
 import com.example.tambolaGame.repository.Repository
 import com.example.tambolaGame.utils.CountDrawable
 import com.example.tambolaGame.utils.RoleEnums
+import com.example.tambolaGame.utils.ScreenshotUtils
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import java.io.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
-var gameRole = RoleEnums.NONE
+
 var isConnected = MutableLiveData<Boolean>().apply{setValue(false)}
 lateinit var sharedRepository: Repository
 
@@ -64,10 +70,12 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
     private lateinit var connectionsClient: ConnectionsClient
     private lateinit var wifiManager: WifiManager
     private lateinit var destiny: String
+    private var filePayloadId: Long = 0
 
     private val permissions = arrayOf(
         Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN,
         Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.CHANGE_WIFI_STATE,
+        Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.ACCESS_FINE_LOCATION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,14 +124,19 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.action_menu, menu)
-
-        if (isConnected.value!!) {
-            if (navController.currentDestination!!.id != R.id.nav_participants_wallet)
-                supportActionBar?.title = navController.currentDestination!!.label.toString() + " - " + myDevice.userId.toString()
-            supportActionBar?.subtitle = "Connected"
+        if (navController.currentDestination!!.id != R.id.nav_add_games) {
+            if (isConnected.value!!) {
+                if (navController.currentDestination!!.id != R.id.nav_participants_wallet)
+                    supportActionBar?.title =
+                        navController.currentDestination!!.label.toString() + " - " + myDevice.userId.toString()
+                supportActionBar?.subtitle = "Connected"
+            } else {
+                supportActionBar?.title = navController.currentDestination!!.label.toString()
+                supportActionBar?.subtitle = "Disconnected"
+            }
         } else {
             supportActionBar?.title = navController.currentDestination!!.label.toString()
-            supportActionBar?.subtitle = "Disconnected"
+            supportActionBar?.subtitle = "Total : $gamesTotalPrice"
         }
         return super.onCreateOptionsMenu(menu)
     }
@@ -131,11 +144,24 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         if (navController.currentDestination!!.id == R.id.nav_main || navController.currentDestination!!.id == R.id.nav_add_games || navController.currentDestination!!.id == R.id.nav_device_list) {
             menu!!.forEach { item -> item.isVisible = false }
+        } else if (navController.currentDestination!!.id == R.id.nav_number_board || navController.currentDestination!!.id == R.id.nav_participants_wallet || navController.currentDestination!!.id == R.id.nav_winner) {
+            if (myDevice.userRole == RoleEnums.SERVER) {
+                menu!!.findItem(R.id.screenshot).isVisible = false
+                menu.findItem(R.id.image_viewer).isVisible = false
+                setMemberCount(this, menu, tambolaMembers.size.toString())
+                setWalletMoney(this, menu, myDevice.walletMoney.toString())
+            } else if (myDevice.userRole == RoleEnums.CLIENT) {
+                menu!!.findItem(R.id.joined_members).isVisible = false
+                menu.findItem(R.id.image_viewer).isVisible = false
+                menu.findItem(R.id.winner).isVisible = false
+                menu.findItem(R.id.screenshot).isVisible = false
+                setWalletMoney(this, menu, myDevice.walletMoney.toString())
+            }
         } else {
-            if (gameRole == RoleEnums.SERVER) {
+            if (myDevice.userRole == RoleEnums.SERVER) {
                 setMemberCount(this, menu!!, tambolaMembers.size.toString())
                 setWalletMoney(this, menu, myDevice.walletMoney.toString())
-            } else if (gameRole == RoleEnums.CLIENT) {
+            } else if (myDevice.userRole == RoleEnums.CLIENT) {
                 menu!!.findItem(R.id.joined_members).isVisible = false
                 menu.findItem(R.id.winner).isVisible = false
                 setWalletMoney(this, menu, myDevice.walletMoney.toString())
@@ -173,7 +199,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
             true
         }
         R.id.wallet -> {
-            if (gameRole == RoleEnums.SERVER) {
+            if (myDevice.userRole == RoleEnums.SERVER) {
                 when (navController.currentDestination!!.id) {
                     R.id.nav_games -> {
                         val bundle = Bundle()
@@ -213,6 +239,31 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
                     navController.navigate(R.id.action_nav_number_board_to_nav_winner)
                 }
             }
+            true
+        }
+        R.id.screenshot -> {
+            val builder = AlertDialog.Builder(this, R.style.CustomDialogTheme).create()
+            val title = "Screenshot Confirmation"
+            builder.setTitle(title)
+            val msg = "Do you want to send screenshot of the ticket?"
+            builder.setMessage(msg)
+            builder.setButton(
+                Dialog.BUTTON_POSITIVE,
+                "OK"
+            ) { dialog, _ ->
+                dialog.dismiss()
+                showProgressBar("Generating & sending screenshot of the ticket", null)
+                val fragment =
+                    supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.first() as GameFragment
+                fragment.takeScreenshot()
+            }
+            builder.setCanceledOnTouchOutside(true)
+            builder.setCancelable(true)
+            builder.show()
+            true
+        }
+        R.id.image_viewer -> {
+            navController.navigate(R.id.action_nav_games_to_nav_image_viewer)
             true
         }
         else -> {
@@ -269,8 +320,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
         val advertisingOptions = AdvertisingOptions.Builder().setStrategy(STRATEGY).build()
 
         isConnected.value = true
-        gameRole = RoleEnums.SERVER
-        myDevice = UserDevice(0, "${sharedRepository.getName()} (0)", null, sharedRepository.getPhoneNumber(), gamesTotalPrice)
+        myDevice = UserDevice(0, "${sharedRepository.getName()} (0)", null, sharedRepository.getPhoneNumber(), gamesTotalPrice, RoleEnums.SERVER)
         tambolaMembers.add(myDevice)
         invalidateOptionsMenu()
 
@@ -286,7 +336,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
             override fun onConnectionResult(endpointId: String, result: ConnectionResolution) {
                 when (result.status.statusCode) {
                     ConnectionsStatusCodes.STATUS_OK -> {
-                        val device = UserDevice(tambolaMembers[tambolaMembers.size - 1].userId + 1, null, endpointId, null, 0)
+                        val device = UserDevice(tambolaMembers[tambolaMembers.size - 1].userId + 1, null, endpointId, null, 0, RoleEnums.CLIENT)
                         tambolaMembers.add(device)
                         sendInitialData(endpointId, device.userId)
                     }
@@ -307,6 +357,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
                     tambolaMembers.remove(tambolaMembers.first { p -> p.endpointID == endpointId })
                     invalidateOptionsMenu()
                 }
+                hideProgressBar()
                 Toast.makeText(applicationContext, "Disconnected", Toast.LENGTH_SHORT).show()
             }
 
@@ -316,7 +367,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
     fun startDiscovery() {
         val discoveryOptions = DiscoveryOptions.Builder().setStrategy(STRATEGY).build()
 
-        myDevice = UserDevice(0 ,sharedRepository.getName(), null, sharedRepository.getPhoneNumber(), 0)
+        myDevice = UserDevice(0 ,sharedRepository.getName(), null, sharedRepository.getPhoneNumber(), 0, RoleEnums.CLIENT)
 
         connectionsClient.startDiscovery(SERVICE_ID, object: EndpointDiscoveryCallback() {
 
@@ -328,7 +379,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
 
                 if (fragment != null) {
                     val adapter = fragment.listAdapter as DeviceListFragment.DeviceListAdapter
-                    val service = UserDevice(0, connectionInfo.endpointName, endPointId, null, 0)
+                    val service = UserDevice(0, connectionInfo.endpointName, endPointId, null, 0, RoleEnums.SERVER)
                     adapter.add(service)
                     adapter.notifyDataSetChanged()
                 }
@@ -353,7 +404,6 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
                 when (result.status.statusCode) {
                     ConnectionsStatusCodes.STATUS_OK -> {
                         tambolaMembers.add(endPoint)
-                        gameRole = RoleEnums.CLIENT
                         isConnected.value = true
                         invalidateOptionsMenu()
                         sendData(endpointId, USER_INFO, "${myDevice.userName}`${myDevice.phone}")
@@ -379,6 +429,12 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
                     }
                     R.id.nav_games -> {
                         navController.navigate(R.id.action_nav_games_to_nav_main)
+                    }
+                    R.id.nav_image_viewer -> {
+
+                    }
+                    R.id.nav_image -> {
+
                     }
                 }
                 Toast.makeText(applicationContext, "Disconnected", Toast.LENGTH_SHORT).show()
@@ -425,6 +481,12 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
         connectionsClient.sendPayload(endpointId, msg)
     }
 
+    fun sendFile(endpointId: String, file: File) {
+        val filePayload = Payload.fromFile(file)
+        filePayloadId = filePayload.id
+        connectionsClient.sendPayload(endpointId, filePayload)
+    }
+
     fun sendAllData(operationCode: String, value: String) {
         val msg = Payload.fromBytes(("$operationCode~$value").toByteArray(Charsets.UTF_8))
         connectionsClient.sendPayload(tambolaMembers.map { it.endpointID }, msg)
@@ -432,19 +494,83 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
 
     private val payloadCallback = object: PayloadCallback() {
         override fun onPayloadReceived(endpointId: String, payload: Payload) {
-            var messageComplete = String(payload.asBytes()!!, Charsets.UTF_8)
-            val operation = messageComplete.split('~')
+            if (payload.type == Payload.Type.BYTES) {
+                var messageComplete = String(payload.asBytes()!!, Charsets.UTF_8)
+                val operation = messageComplete.split('~')
 
-            if (operation[0] == USER_INFO) {
-                var msg = operation[1]
-                msg = "$endpointId`$msg"
-                messageComplete = "${operation[0]}~$msg"
+                if (operation[0] == USER_INFO) {
+                    var msg = operation[1]
+                    msg = "$endpointId`$msg"
+                    messageComplete = "${operation[0]}~$msg"
+                }
+
+                receivedMessage(messageComplete)
+            } else {
+                receivedFile(endpointId, payload)
             }
-
-            receivedMessage(messageComplete)
         }
 
-        override fun onPayloadTransferUpdate(endpointId: String, update: PayloadTransferUpdate) {}
+        override fun onPayloadTransferUpdate(endpointId: String, update: PayloadTransferUpdate) {
+            if (update.payloadId == filePayloadId) {
+                hideProgressBar()
+                Toast.makeText(applicationContext, "Screenshot Sent", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun receivedFile(endpointId: String, filePayload: Payload) {
+        val userName = tambolaMembers.first { it.endpointID == endpointId }.userName
+        val timeStamp = SimpleDateFormat("dd_MM_yy_h:mm:ss", Locale.ENGLISH).format(Date())
+        val fileName = "${userName}_${timeStamp}.jpg"
+
+        val dir = ScreenshotUtils().getMainDirectoryName(applicationContext)
+
+        val imageFile = File(dir!!.absolutePath, fileName)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val extStorageDirectory = getExternalFilesDir(null)!!
+
+            val folder = File(File(extStorageDirectory.absolutePath.substringBefore("Android")), "Download/Nearby")
+            val file = File(folder, filePayload.id.toString())
+            val uri = FileProvider.getUriForFile(applicationContext, "com.example.tambolaGame.fileprovider", file)
+            try {
+                val source = FileInputStream(
+                    applicationContext!!.contentResolver.openFileDescriptor(
+                        uri,
+                        "r"
+                    )!!.fileDescriptor
+                ).channel
+                val destination = FileOutputStream(imageFile).channel
+                destination.transferFrom(source, 0, source.size())
+
+                /*val inp = applicationContext.contentResolver.openInputStream(uri)
+                copyStream(inp!!, FileOutputStream(imageFile))*/
+            } catch (ex: IOException) {
+                Toast.makeText(applicationContext, "Error in receiving screenshot", Toast.LENGTH_SHORT).show()
+            } finally {
+                applicationContext.contentResolver.delete(uri, null, null)
+                Toast.makeText(applicationContext, "Screenshot received", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            val payloadFile = filePayload.asFile()!!.asJavaFile()
+            payloadFile!!.renameTo(imageFile)
+            Toast.makeText(applicationContext, "Screenshot received", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun copyStream(inp: InputStream, out: OutputStream) {
+        try {
+            val buffer = byteArrayOf()
+            var read = inp.read(buffer)
+            while (read != -1) {
+                out.write(buffer, 0, read)
+                read = inp.read(buffer)
+            }
+            out.flush()
+        } finally {
+            inp.close()
+            out.close()
+        }
     }
 
     private fun receivedMessage(readMessage: String) {
@@ -506,20 +632,37 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
                 val gameName = values[2]
                 val gamePrice = values[3].toInt()
                 val winner = values[4]
-                val winnerId = values[5].toInt()
+                val winnerId = values[5]
+
+                val winnerList = winner.drop(1).dropLast(1)
+
+                val winnerListItem = winnerList.split(',')
+
+                val winnerIdList = winnerId.drop(1).dropLast(1)
+
+                val winnerIdListItem = winnerIdList.split("""\W+""".toRegex())
 
                 val oldList = tambolaGameList.map { it.copy() }
 
-                if (myDevice.userId == winnerId) {
-                    myDevice.walletMoney += gamePrice
+                if (winnerIdListItem.contains(myDevice.userId.toString())) {
+                    myDevice.walletMoney += (gamePrice / winnerIdListItem.size)
                 }
                 invalidateOptionsMenu()
 
-                val win = UserDevice(winnerId, winner, null, null, 0)
+                val winnersDevice = ArrayList<UserDevice>()
+                for (i in winnerIdListItem.indices) {
+                    val gameRole = if (winnerIdListItem[i].toInt() == 0)
+                        RoleEnums.SERVER
+                    else
+                        RoleEnums.CLIENT
+                    val win = UserDevice(winnerIdListItem[i].toInt(), winnerListItem[i].trim(), null, null, 0, gameRole)
+                    winnersDevice.add(win)
+                }
+
                 if (tambolaGameList[position].gameId == gameId) {
-                    tambolaGameList[position].gameWinner = win
+                    tambolaGameList[position].gameWinner = winnersDevice
                 } else {
-                    tambolaGameList.first {it.gameName == gameName}.gameWinner = win
+                    tambolaGameList.first {it.gameName == gameName}.gameWinner = winnersDevice
                 }
 
                 if (currFragment == R.id.nav_games) {
@@ -550,23 +693,46 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
                 val gameName = values[2]
                 val gamePrice = values[3].toInt()
                 val winner = values[4]
-                val winnerId = values[5].toInt()
-                val prevWinnerId = values[6].toInt()
+                val winnerId = values[5]
+                val prevWinnerId = values[6]
+
+                val winnerList = winner.drop(1).dropLast(1)
+
+                val winnerListItem = winnerList.split(',')
+
+                val winnerIdList = winnerId.drop(1).dropLast(1)
+
+                val winnerIdListItem = winnerIdList.split("""\W+""".toRegex())
+
+                val prevWinnerIdList = prevWinnerId.drop(1).dropLast(1)
+
+                val prevWinnerIdListItem = prevWinnerIdList.split("""\W+""".toRegex())
 
                 val oldList = tambolaGameList.map { it.copy() }
 
-                if (myDevice.userId == winnerId) {
-                    myDevice.walletMoney += gamePrice
-                } else if (myDevice.userId == prevWinnerId) {
-                    myDevice.walletMoney -= gamePrice
+                if (winnerIdListItem.contains(myDevice.userId.toString())) {
+                    myDevice.walletMoney += (gamePrice / winnerIdListItem.size)
+                }
+
+                if (prevWinnerIdListItem.contains(myDevice.userId.toString())) {
+                    myDevice.walletMoney -= (gamePrice / prevWinnerIdListItem.size)
                 }
                 invalidateOptionsMenu()
 
-                val win = UserDevice(winnerId, winner, null, null, 0)
+                val winnersDevice = ArrayList<UserDevice>()
+                for (i in winnerIdListItem.indices) {
+                    val gameRole = if (winnerIdListItem[i].toInt() == 0)
+                        RoleEnums.SERVER
+                    else
+                        RoleEnums.CLIENT
+                    val win = UserDevice(winnerIdListItem[i].toInt(), winnerListItem[i].trim(), null, null, 0, gameRole)
+                    winnersDevice.add(win)
+                }
+
                 if (tambolaGameList[position].gameId == gameId) {
-                    tambolaGameList[position].gameWinner = win
+                    tambolaGameList[position].gameWinner = winnersDevice
                 } else {
-                    tambolaGameList.first {it.gameName == gameName}.gameWinner = win
+                    tambolaGameList.first {it.gameName == gameName}.gameWinner = winnersDevice
                 }
 
                 if (currFragment == R.id.nav_games) {
@@ -582,12 +748,16 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
                 val gameId = values[1].toInt()
                 val gameName = values[2]
                 val gamePrice = values[3].toInt()
-                val prevWinnerId = values[4].toInt()
+                val prevWinnerId = values[4]
+
+                val prevWinnerIdList = prevWinnerId.drop(1).dropLast(1)
+
+                val prevWinnerIdListItem = prevWinnerIdList.split("""\W+""".toRegex())
 
                 val oldList = tambolaGameList.map { it.copy() }
 
-                if (myDevice.userId == prevWinnerId) {
-                    myDevice.walletMoney -= gamePrice
+                if (prevWinnerIdListItem.contains(myDevice.userId.toString())) {
+                    myDevice.walletMoney -= (gamePrice / prevWinnerIdListItem.size)
                 }
                 invalidateOptionsMenu()
 
@@ -644,7 +814,8 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
                             resources.getString(R.string.yes)
                         ) { dialog, _ ->
                             dialog.dismiss()
-                            super.onBackPressed()
+                            if (navController.currentDestination!!.id == R.id.nav_games)
+                                super.onBackPressed()
                         }
 
                         alertDialog.setButton(
@@ -698,7 +869,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
         }
     }
 
-    private fun showProgressBar(text: String, message: String?) {
+    fun showProgressBar(text: String, message: String?) {
         val loadingProgress = findViewById<ConstraintLayout>(R.id.progress_homepage)
         val loadingText = loadingProgress.findViewById<TextView>(R.id.loadingText)
         val loadingMessage = loadingProgress.findViewById<TextView>(R.id.loading_message)
@@ -734,7 +905,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
         }
     }
 
-    private fun hideProgressBar() {
+    fun hideProgressBar() {
         val loadingProgress = findViewById<ConstraintLayout>(R.id.progress_homepage)
 
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -939,17 +1110,17 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
     }
 
     private fun onGameEnd() {
-        if (gameRole == RoleEnums.SERVER) {
+        if (myDevice.userRole == RoleEnums.SERVER) {
             connectionsClient.stopAllEndpoints()
-            isConnected.value = false
-            gameRole = RoleEnums.NONE
-            invalidateOptionsMenu()
-        } else if (gameRole == RoleEnums.CLIENT){
+        } else if (myDevice.userRole == RoleEnums.CLIENT){
             connectionsClient.disconnectFromEndpoint(tambolaMembers[0].endpointID!!)
-            isConnected.value = false
-            gameRole = RoleEnums.NONE
-            invalidateOptionsMenu()
         }
+        isConnected.value = false
+        myDevice.userRole = RoleEnums.NONE
+        invalidateOptionsMenu()
+
+        val dir = ScreenshotUtils().getMainDirectoryName(applicationContext)
+        dir!!.deleteRecursively()
         tambolaGameList.clear()
         tambolaMembers.clear()
         currNumber = ""
@@ -971,7 +1142,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
         var gameStart = false
         var gamesTotalPrice = 0
         var selectedGame: Game? = null
-        var myDevice = UserDevice(-1, null, null, null, 0)
+        var myDevice = UserDevice(-1, null, null, null, 0, RoleEnums.NONE)
 
         val STRATEGY = Strategy.P2P_STAR!!
         const val SERVICE_ID = "com.example.tambolaGame.praneet"

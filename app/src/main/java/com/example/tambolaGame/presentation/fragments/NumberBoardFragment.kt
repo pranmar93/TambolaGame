@@ -9,6 +9,7 @@ import com.example.tambolaGame.R
 import com.example.tambolaGame.presentation.adapters.NumberBoardAdapter
 import kotlinx.android.synthetic.main.fragment_number_board.view.*
 
+
 class NumberBoardFragment: Fragment() {
 
     private lateinit var root: View

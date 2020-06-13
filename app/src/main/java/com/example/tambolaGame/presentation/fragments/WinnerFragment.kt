@@ -9,6 +9,7 @@ import com.example.tambolaGame.R
 import com.example.tambolaGame.presentation.adapters.WinnerAdapter
 import kotlinx.android.synthetic.main.fragment_winner.view.*
 
+
 class WinnerFragment: Fragment() {
 
     override fun onCreateView(

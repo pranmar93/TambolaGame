@@ -13,6 +13,7 @@ import com.example.tambolaGame.models.UserDevice
 import com.example.tambolaGame.presentation.adapters.ParticipantsWalletAdapter
 import kotlinx.android.synthetic.main.fragment_participants_wallet.view.*
 
+
 class ParticipantsWalletFragment: Fragment() {
 
     private lateinit var root: View

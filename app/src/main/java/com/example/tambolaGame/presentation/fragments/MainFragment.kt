@@ -56,14 +56,9 @@ class MainFragment: Fragment(){
 
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
         }
 
         phoneTextWatcher = object : TextWatcher {
@@ -87,14 +82,9 @@ class MainFragment: Fragment(){
                 }
             }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
         }
 
         priceTextWatcher = object : TextWatcher {
@@ -195,6 +185,10 @@ class MainFragment: Fragment(){
                 label_members.visibility = View.GONE
                 edit_members.visibility = View.GONE
                 label_amount.visibility = View.GONE
+
+                if (root.edit_phone.text.trim().isNotBlank() && root.edit_name.text.trim().isNotBlank()) {
+                    root.button.isEnabled = true
+                }
 
                 root.edit_price_ticket.removeTextChangedListener (priceTextWatcher)
                 root.edit_members.removeTextChangedListener (membersTextWatcher)

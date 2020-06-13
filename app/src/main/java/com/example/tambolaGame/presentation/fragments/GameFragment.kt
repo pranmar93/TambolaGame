@@ -22,20 +22,23 @@ import com.example.tambolaGame.MainActivity.Companion.REMOVE_WINNER
 import com.example.tambolaGame.MainActivity.Companion.currNumber
 import com.example.tambolaGame.MainActivity.Companion.gameStart
 import com.example.tambolaGame.MainActivity.Companion.members
+import com.example.tambolaGame.MainActivity.Companion.myDevice
 import com.example.tambolaGame.MainActivity.Companion.prevNumber
 import com.example.tambolaGame.MainActivity.Companion.tambolaGameList
 import com.example.tambolaGame.MainActivity.Companion.tambolaMembers
 import com.example.tambolaGame.MainActivity.Companion.ticketSize
 import com.example.tambolaGame.R
-import com.example.tambolaGame.gameRole
 import com.example.tambolaGame.interfaces.WinnerChangedListener
 import com.example.tambolaGame.models.Game
 import com.example.tambolaGame.presentation.adapters.GamesAdapter
 import com.example.tambolaGame.ticketGrid.TambolaGrid
 import com.example.tambolaGame.utils.RoleEnums
+import com.example.tambolaGame.utils.ScreenshotUtils
 import com.example.ticketgenerator.GridGenerator
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_game_ticket.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class GameFragment: Fragment(), WinnerChangedListener {
@@ -67,7 +70,7 @@ class GameFragment: Fragment(), WinnerChangedListener {
 
             numberGenerator = NumberGenerator()
 
-            if (gameRole == RoleEnums.SERVER) {
+            if (myDevice.userRole == RoleEnums.SERVER) {
                 root.gen_number.setOnClickListener {
                     if (tambolaMembers.size == members || gameStart) {
                         if (gameStart) {
@@ -194,6 +197,43 @@ class GameFragment: Fragment(), WinnerChangedListener {
         }
     }
 
+    fun takeScreenshot() {
+        val screenshotUtils = ScreenshotUtils()
+        val screenBitMap = screenshotUtils.getScreenShot(root.game_ticket)
+        val timeStamp = SimpleDateFormat("dd_MM_yy_h:mm:ss", Locale.ENGLISH).format(Date())
+
+        if (screenBitMap != null) {
+            val screenshotFile = screenshotUtils.store(
+                screenBitMap,
+                "${myDevice.userName}_${timeStamp}.jpg",
+                context!!
+            )
+            if (myDevice.userRole == RoleEnums.SERVER) {
+                val list = Array(tambolaMembers.size) { "" }
+
+                for ((i, item) in tambolaMembers.withIndex()) {
+                    list[i] = item.userName!!
+                }
+
+                val alertDialog = AlertDialog.Builder(this.context!!, R.style.CustomDialogTheme)
+                alertDialog.setTitle("Select Recipient")
+
+                alertDialog.setItems(
+                    list
+                ) { _, index ->
+                    val user = tambolaMembers[index]
+                    (activity as MainActivity).sendFile(user.endpointID!!, screenshotFile!!)
+                }
+                alertDialog.create()
+                alertDialog.show()
+            } else {
+                (activity as MainActivity).sendFile(tambolaMembers[0].endpointID!!, screenshotFile!!)
+            }
+        }
+        else
+            Toast.makeText(context, "Error in taking screenshot", Toast.LENGTH_SHORT).show()
+    }
+
     override fun onPause() {
         /*requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         (activity as MainActivity).showActionBar()*/
@@ -201,17 +241,17 @@ class GameFragment: Fragment(), WinnerChangedListener {
         super.onPause()
     }
 
-    override fun setWinnerData(position: Int, gameId: Int, gameName: String, gamePrice: Int, winner: String, winnerUserId: Int) {
+    override fun setWinnerData(position: Int, gameId: Int, gameName: String, gamePrice: Int, winner: List<String>, winnerUserId: List<Int>) {
         (activity as MainActivity).sendAllData(ADD_WINNER, "$position`$gameId`$gameName`$gamePrice`$winner`$winnerUserId")
         (activity as MainActivity).invalidateOptionsMenu()
     }
 
-    override fun changeWinnerData(position: Int, gameId: Int, gameName: String, gamePrice: Int, newWinner: String, newWinnerUserId: Int, prevWinnerUserId: Int) {
+    override fun changeWinnerData(position: Int, gameId: Int, gameName: String, gamePrice: Int, newWinner: List<String>, newWinnerUserId: List<Int>, prevWinnerUserId: List<Int>) {
         (activity as MainActivity).sendAllData(CHANGE_WINNER, "$position`$gameId`$gameName`$gamePrice`$newWinner`$newWinnerUserId`$prevWinnerUserId")
         (activity as MainActivity).invalidateOptionsMenu()
     }
 
-    override fun removeWinnerData(position: Int, gameId: Int, gameName: String, gamePrice: Int, prevWinnerUserId: Int) {
+    override fun removeWinnerData(position: Int, gameId: Int, gameName: String, gamePrice: Int, prevWinnerUserId: List<Int>) {
         (activity as MainActivity).sendAllData(REMOVE_WINNER, "$position`$gameId`$gameName`$gamePrice`$prevWinnerUserId")
         (activity as MainActivity).invalidateOptionsMenu()
     }

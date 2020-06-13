@@ -13,6 +13,7 @@ import com.example.tambolaGame.R
 import com.example.tambolaGame.models.UserDevice
 import kotlinx.android.synthetic.main.item_participants_wallet.view.*
 
+
 class ParticipantsWalletAdapter(private val context: Context, private val type: String, private val adapterList: List<UserDevice>):
     RecyclerView.Adapter<ParticipantsWalletAdapter.ParticipantsViewHolder>(){
 

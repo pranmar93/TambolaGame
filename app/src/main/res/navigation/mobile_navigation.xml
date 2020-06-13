@@ -65,6 +65,9 @@
         <action android:id="@+id/action_nav_games_to_nav_number_board"
             app:destination="@id/nav_number_board"/>
 
+        <action android:id="@+id/action_nav_games_to_nav_image_viewer"
+            app:destination="@id/nav_image_viewer"/>
+
     </fragment>
 
     <fragment
@@ -111,6 +114,35 @@
         <action android:id="@+id/action_nav_winner_to_nav_participants_wallet"
             app:destination="@id/nav_participants_wallet"
             app:popUpTo="@id/nav_games"
+            app:popUpToInclusive="false"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_image_viewer"
+        android:name="com.example.tambolaGame.presentation.fragments.ImageViewerFragment"
+        android:label="Screenshots Directory"
+        tools:layout="@layout/fragment_image_viewer">
+
+        <action android:id="@+id/action_nav_image_viewer_to_nav_image"
+            app:destination="@id/nav_image" />
+
+        <action android:id="@+id/action_nav_image_viewer_to_nav_main"
+            app:destination="@id/nav_main"
+            app:popUpTo="@id/nav_main"
+            app:popUpToInclusive="false"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_image"
+        android:name="com.example.tambolaGame.presentation.fragments.ImageFragment"
+        android:label="Screenshot"
+        tools:layout="@layout/fragment_image">
+
+        <action android:id="@+id/action_nav_image_to_nav_main"
+            app:destination="@id/nav_main"
+            app:popUpTo="@id/nav_main"
             app:popUpToInclusive="false"/>
 
     </fragment>

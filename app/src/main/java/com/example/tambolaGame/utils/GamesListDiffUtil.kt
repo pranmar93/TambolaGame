@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.DiffUtil
 import com.example.tambolaGame.models.Game
+import com.example.tambolaGame.models.UserDevice
+import com.google.gson.Gson
+
 
 class GamesListDiffUtil(
     private var oldList: List<Game>,
@@ -19,11 +22,11 @@ class GamesListDiffUtil(
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldItemPosition == newItemPosition
+        return oldList[oldItemPosition] == newList[newItemPosition]
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition] == newList[newItemPosition]
+        return ((oldList[oldItemPosition].gameId == newList[newItemPosition].gameId) && (oldList[oldItemPosition].gameName == newList[newItemPosition].gameName))
     }
 
     @Nullable
@@ -33,13 +36,28 @@ class GamesListDiffUtil(
         val newItemWinner = newList[newItemPosition].gameWinner
 
         val diff = Bundle()
-        if (oldItemWinner != newItemWinner)
-            if (newItemWinner != null)
-                diff.putString("winner", newItemWinner.userName)
-            else
-                diff.putString("winner", null)
+        if (!equalLists(oldItemWinner, newItemWinner)) {
+            if (newItemWinner != null) {
+                val winnerString = Gson().toJson(newItemWinner)
+                diff.putString("winners", winnerString)
+            } else
+                diff.putString("winners", null)
+        }
 
         return diff
-        //return super.getChangePayload(oldItemPosition, newItemPosition)
+    }
+
+    private fun equalLists(
+        one: List<UserDevice>?,
+        two: List<UserDevice>?
+    ): Boolean {
+
+        if (one == null && two == null)
+            return true
+
+        if (one == null && two != null || one != null && two == null || one!!.size != two!!.size)
+            return false
+
+        return one.containsAll(two) && two.containsAll(one)
     }
 }

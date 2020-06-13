@@ -36,7 +36,6 @@
         android:layout_marginBottom="5dp">
 
         <Button
-            style="@style/button_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btn_new_games"
@@ -45,11 +44,10 @@
             android:layout_weight="1"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:drawableStart="@drawable/ic_add_games"
-            android:text="@string/btn_text_add_new"/>
+            android:text="@string/btn_text_add_new"
+            style="@style/button_style"/>
 
         <Button
-            style="@style/button_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btn_start_game"
@@ -58,8 +56,8 @@
             android:layout_weight="1"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:drawableStart="@drawable/ic_server"
-            android:text="@string/btn_text_build_server"/>
+            android:text="@string/btn_text_build_server"
+            style="@style/button_style"/>
 
     </LinearLayout>
 

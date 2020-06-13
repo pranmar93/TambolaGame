@@ -19,6 +19,18 @@
         android:id="@+id/winner"
         android:icon="@drawable/ic_winner"
         android:title="@string/menu_winner"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/screenshot"
+        android:icon="@drawable/ic_screenshot"
+        android:title="@string/menu_screenshot"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/image_viewer"
+        android:icon="@drawable/ic_image_viewer"
+        android:title="@string/menu_image_viewer"
+        app:showAsAction="never"/>
 
 </menu>

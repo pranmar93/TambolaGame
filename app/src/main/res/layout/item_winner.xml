@@ -33,6 +33,7 @@
         android:textSize="20sp"
         android:gravity="center"
         android:textStyle="bold"
+        android:scrollbars="horizontal"
         android:maxLines="1"
         android:ellipsize="end"/>
 

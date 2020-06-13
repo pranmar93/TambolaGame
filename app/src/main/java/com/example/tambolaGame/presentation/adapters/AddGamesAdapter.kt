@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.item_add_game.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class AddGamesAdapter
     (private val context: Context,
      private val gameChangedListener: GameChangedListener)
@@ -89,6 +90,7 @@ class AddGamesAdapter
             val oldList = ArrayList<Game>()
             oldList.addAll(tambolaGameList)
             gamesTotalPrice -= tambolaGameList[position].gamePrice
+            gameChangedListener.updateActionSubTitle()
             tambolaGameList.removeAt(position)
             updateAddGamesList(oldList, tambolaGameList)
             if (tambolaGameList.size == 0)
@@ -140,6 +142,7 @@ class AddGamesAdapter
                     if (prizeMoney <= (ticketPrice * members)) {
                         alertDialog.dismiss()
                         gamesTotalPrice = prizeMoney
+                        gameChangedListener.updateActionSubTitle()
                         val oldList = ArrayList<Game>()
                         oldList.addAll(tambolaGameList)
                         val newGame = Game(game.gameId, nameInput.text.toString().trim(), priceInput.text.toString().trim().toInt(), null)
@@ -167,6 +170,7 @@ class AddGamesAdapter
         val oldList = ArrayList<Game>()
         oldList.addAll(tambolaGameList)
         gamesTotalPrice += game.gamePrice
+        gameChangedListener.updateActionSubTitle()
         tambolaGameList.add(game)
         updateAddGamesList(oldList, tambolaGameList)
         if (pos == 0)

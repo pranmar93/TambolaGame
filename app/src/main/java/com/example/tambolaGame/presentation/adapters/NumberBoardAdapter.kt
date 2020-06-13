@@ -10,6 +10,7 @@ import com.example.tambolaGame.R
 import com.example.tambolaGame.presentation.fragments.GameFragment
 import kotlinx.android.synthetic.main.item_number_board.view.*
 
+
 class NumberBoardAdapter(private val context: Context):
     RecyclerView.Adapter<NumberBoardAdapter.NumberViewHolder>(){
 

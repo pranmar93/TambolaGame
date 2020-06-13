@@ -21,5 +21,7 @@
     <string name="menu_wallet">Money Holder</string>
     <string name="menu_participants">Joined Members</string>
     <string name="menu_winner">Winners</string>
+    <string name="menu_screenshot">Screenshot</string>
+    <string name="menu_image_viewer">Image Viewer</string>
     <string name="game_end">END</string>
 </resources>

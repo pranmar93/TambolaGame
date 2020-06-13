@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.fragment_add_games.*
 import kotlinx.android.synthetic.main.fragment_add_games.view.*
 import java.util.*
 
+
 class AddGamesFragment: Fragment(), GameChangedListener {
 
     private lateinit var root: View
@@ -181,5 +182,9 @@ class AddGamesFragment: Fragment(), GameChangedListener {
             no_added_games.visibility = View.GONE
             addGames_recycler.visibility = View.VISIBLE
         }
+    }
+
+    override fun updateActionSubTitle() {
+        (activity as MainActivity).invalidateOptionsMenu()
     }
 }
