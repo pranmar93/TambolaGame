@@ -209,23 +209,29 @@ class GameFragment: Fragment(), WinnerChangedListener {
                 context!!
             )
             if (myDevice.userRole == RoleEnums.SERVER) {
-                val list = Array(tambolaMembers.size) { "" }
+                val list = Array(tambolaMembers.size - 1) { "" }
 
                 for ((i, item) in tambolaMembers.withIndex()) {
-                    list[i] = item.userName!!
+                    if (i != 0)
+                        list[i-1] = item.userName!!
                 }
 
-                val alertDialog = AlertDialog.Builder(this.context!!, R.style.CustomDialogTheme)
-                alertDialog.setTitle("Select Recipient")
+                if (list.isNotEmpty()) {
+                    val alertDialog = AlertDialog.Builder(this.context!!, R.style.CustomDialogTheme)
+                    alertDialog.setTitle("Select Recipient")
 
-                alertDialog.setItems(
-                    list
-                ) { _, index ->
-                    val user = tambolaMembers[index]
-                    (activity as MainActivity).sendFile(user.endpointID!!, screenshotFile!!)
+                    alertDialog.setItems(
+                        list
+                    ) { _, index ->
+                        val user = tambolaMembers[index+1]
+                        (activity as MainActivity).sendFile(user.endpointID!!, screenshotFile!!)
+                    }
+                    alertDialog.create()
+                    alertDialog.show()
+                } else {
+                    (activity as MainActivity).hideProgressBar()
+                    Toast.makeText(context, "No recipient available", Toast.LENGTH_SHORT).show()
                 }
-                alertDialog.create()
-                alertDialog.show()
             } else {
                 (activity as MainActivity).sendFile(tambolaMembers[0].endpointID!!, screenshotFile!!)
             }

@@ -42,6 +42,7 @@ import com.example.tambolaGame.models.Game
 import com.example.tambolaGame.models.UserDevice
 import com.example.tambolaGame.presentation.fragments.DeviceListFragment
 import com.example.tambolaGame.presentation.fragments.GameFragment
+import com.example.tambolaGame.presentation.fragments.ImageViewerFragment
 import com.example.tambolaGame.presentation.fragments.ParticipantsWalletFragment
 import com.example.tambolaGame.repository.Repository
 import com.example.tambolaGame.utils.CountDrawable
@@ -142,7 +143,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        if (navController.currentDestination!!.id == R.id.nav_main || navController.currentDestination!!.id == R.id.nav_add_games || navController.currentDestination!!.id == R.id.nav_device_list) {
+        if (navController.currentDestination!!.id == R.id.nav_main || navController.currentDestination!!.id == R.id.nav_add_games || navController.currentDestination!!.id == R.id.nav_device_list || navController.currentDestination!!.id == R.id.nav_image_viewer || navController.currentDestination!!.id == R.id.nav_image) {
             menu!!.forEach { item -> item.isVisible = false }
         } else if (navController.currentDestination!!.id == R.id.nav_number_board || navController.currentDestination!!.id == R.id.nav_participants_wallet || navController.currentDestination!!.id == R.id.nav_winner) {
             if (myDevice.userRole == RoleEnums.SERVER) {
@@ -431,10 +432,10 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
                         navController.navigate(R.id.action_nav_games_to_nav_main)
                     }
                     R.id.nav_image_viewer -> {
-
+                        navController.navigate(R.id.action_nav_image_viewer_to_nav_main)
                     }
                     R.id.nav_image -> {
-
+                        navController.navigate(R.id.action_nav_image_to_nav_main)
                     }
                 }
                 Toast.makeText(applicationContext, "Disconnected", Toast.LENGTH_SHORT).show()
@@ -555,6 +556,13 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
             val payloadFile = filePayload.asFile()!!.asJavaFile()
             payloadFile!!.renameTo(imageFile)
             Toast.makeText(applicationContext, "Screenshot received", Toast.LENGTH_SHORT).show()
+        }
+
+        val currFragment = navController.currentDestination!!.id
+        if (currFragment == R.id.nav_image_viewer) {
+            val fragment =
+                supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.first()
+            (fragment as ImageViewerFragment).updateAdapter(fileName)
         }
     }
 

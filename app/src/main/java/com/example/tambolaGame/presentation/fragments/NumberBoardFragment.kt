@@ -12,19 +12,14 @@ import kotlinx.android.synthetic.main.fragment_number_board.view.*
 
 class NumberBoardFragment: Fragment() {
 
-    private lateinit var root: View
-    private lateinit var numberBoardAdapter: NumberBoardAdapter
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        root = inflater.inflate(R.layout.fragment_number_board, container, false)
+        val root = inflater.inflate(R.layout.fragment_number_board, container, false)
 
-        numberBoardAdapter = NumberBoardAdapter(context!!)
-
-        root.numberBoard_rv.adapter = numberBoardAdapter
+        root.numberBoard_rv.adapter = NumberBoardAdapter(context!!)
 
         return root
     }

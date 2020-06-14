@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.tambolaGame.MainActivity
 import com.example.tambolaGame.R
+import com.example.tambolaGame.presentation.adapters.NumberBoardAdapter
 import com.example.tambolaGame.utils.ScreenshotUtils
 import kotlinx.android.synthetic.main.fragment_image.view.*
 import java.io.File
@@ -29,6 +30,8 @@ class ImageFragment: Fragment() {
         val imageFile = File(dir!!.absolutePath, fileName!!)
 
         root.image_view.setImageBitmap(BitmapFactory.decodeFile(imageFile.absolutePath))
+
+        root.image_numbers_rv.adapter = NumberBoardAdapter(context!!)
 
         (activity as MainActivity).hideProgressBar()
 

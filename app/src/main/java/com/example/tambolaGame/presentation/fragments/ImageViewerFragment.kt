@@ -26,25 +26,29 @@ class ImageViewerFragment: ListFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if (root == null) {
-            root = inflater.inflate(R.layout.fragment_image_viewer, container, false)
-            val dir = ScreenshotUtils().getMainDirectoryName(context!!)
+        root = inflater.inflate(R.layout.fragment_image_viewer, container, false)
+        val dir = ScreenshotUtils().getMainDirectoryName(context!!)
 
-            val files = dir!!.listFiles()
+        val files = dir!!.listFiles()
 
-            for (file in files!!) {
-                fileList.add(file.name)
-            }
-
-            imageAdapter = ImageAdapter(
-                activity,
-                android.R.layout.simple_list_item_2, android.R.id.text1,
-                fileList
-            )
-            listAdapter = imageAdapter
+        fileList.clear()
+        for (file in files!!) {
+            fileList.add(file.name)
         }
 
+        imageAdapter = ImageAdapter(
+            activity,
+            android.R.layout.simple_list_item_2, android.R.id.text1,
+            fileList
+        )
+        listAdapter = imageAdapter
+
         return root!!
+    }
+
+    fun updateAdapter(fileName: String) {
+        fileList.add(fileName)
+        imageAdapter!!.notifyDataSetChanged()
     }
 
     @SuppressLint("SetTextI18n")

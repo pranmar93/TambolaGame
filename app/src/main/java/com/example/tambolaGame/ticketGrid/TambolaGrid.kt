@@ -57,7 +57,12 @@ class TambolaGrid (private val context: Context) {
                     tv.isClickable = false
                     tv.isLongClickable = false
                 }
-                tv.setBackgroundColor(parseColor("#ffffff"))
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    tv.setBackgroundColor(parseColor("#ffffff"))
+                } else {
+                    tv.background = ContextCompat.getDrawable(context, R.drawable.cell_state_drawable)
+                }
 
                 return tv
             }
@@ -71,14 +76,16 @@ class TambolaGrid (private val context: Context) {
                 else
                     view.foreground = null
             } else {
-                if (view.alpha == 0.3f) {
-                    view.background =
-                        ContextCompat.getDrawable(context, R.drawable.background_uncheck)
+                if (view.alpha == 0.98f) {
+                    view.isActivated = false
+                    /*view.background =
+                        ContextCompat.getDrawable(context, R.drawable.background_uncheck)*/
                     view.alpha = 1f
                 }
                 else {
-                    view.alpha = 0.3f
-                    view.background = ContextCompat.getDrawable(context, R.drawable.background_check)
+                    view.isActivated = true
+                    view.alpha = 0.98f
+                    /*view.background = ContextCompat.getDrawable(context, R.drawable.background_check)*/
                 }
             }
         }
