@@ -543,7 +543,6 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
                 ).channel
                 val destination = FileOutputStream(imageFile).channel
                 destination.transferFrom(source, 0, source.size())
-
                 /*val inp = applicationContext.contentResolver.openInputStream(uri)
                 copyStream(inp!!, FileOutputStream(imageFile))*/
             } catch (ex: IOException) {
@@ -566,7 +565,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
         }
     }
 
-    private fun copyStream(inp: InputStream, out: OutputStream) {
+    /*private fun copyStream(inp: InputStream, out: OutputStream) {
         try {
             val buffer = byteArrayOf()
             var read = inp.read(buffer)
@@ -579,7 +578,7 @@ class MainActivity : AppCompatActivity(), DeviceListFragment.DeviceClickListener
             inp.close()
             out.close()
         }
-    }
+    }*/
 
     private fun receivedMessage(readMessage: String) {
         val splitString = readMessage.split('~')
